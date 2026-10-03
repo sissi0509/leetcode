@@ -21,9 +21,9 @@ Every file starts with the same header (see [`_template/solution.py`](_template/
 
 | Tier | Topics | Solved |
 |---|---|---|
-| A: Core patterns | Hashmap · Two Pointers · Array · Sliding Window · Binary Search · Stack · Heap · Intervals | 0 / 47 |
+| A: Core patterns | Hashmap · Two Pointers · Array · Sliding Window · Binary Search · Stack · Heap · Intervals | 1 / 47 |
 | B: Linked structures & recursion | Linked List · Binary Tree · BFS · BST | 0 / 32 |
 | C: Graphs & search | Graph · Graph BFS · Trie · Backtracking | 0 / 19 |
-| D: Sorting, matrix, greedy | Divide & Conquer · Matrix · Greedy | 1 / 16 |
+| D: Sorting, matrix, greedy | Divide & Conquer · Matrix · Greedy | 2 / 16 |
 | E: Dynamic programming | Kadane · 1D DP · Multi-D DP | 0 / 16 |
 | F: Other | Strings · Bit Manipulation · Math | 0 / 20 |
