@@ -1,11 +1,18 @@
 """
-<number>. <Problem Title>  (<Easy|Medium|Hard>)
-https://leetcode.com/problems/<problem-slug>/
+73. Set Matrix Zeroes  (Medium)
+https://leetcode.com/problems/set-matrix-zeroes/
 
-Pattern:    <technique>, clue: "<what in the problem points to it>"
-Key idea:   <1-2 sentences, plain words, as if explaining to a friend>
-Complexity: O(?) time, O(?) space
-Mistake I made: <optional>
+Pattern:    in-place marker storage, clue: "do it in place" + follow-up "O(1) space"
+Key idea:   Use the first row and first column as flags: matrix[0][c] == 0 means
+            "zero column c", matrix[r][0] == 0 means "zero row r". Since they now
+            hold markers, record whether the first row/column had a zero of their
+            own in two booleans *before* marking, and apply those last.
+            Path there: copy the matrix O(mn) -> row/col sets O(m+n) -> reuse the
+            first row/col O(1).
+Complexity: O(m*n) time, O(1) extra space
+Mistake I made: When encoding I remembered to skip the first row/column, but when
+            decoding I forgot. My decode loops started at 0, so they read markers
+            I had just written. Lesson: check the code against my own plan.
 """
 
 
