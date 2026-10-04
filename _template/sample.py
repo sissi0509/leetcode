@@ -3,9 +3,11 @@
 https://leetcode.com/problems/<problem-slug>/
 
 Pattern:    <technique>, clue: "<what in the problem points to it>"
-Key idea:   <1-2 sentences, plain words, as if explaining to a friend>
+Key idea:
+  - <one short line each>
 Complexity: O(?) time, O(?) space
-Mistake I made: <optional>
+Mistake I made:
+  - <optional, one short line each>
 """
 
 

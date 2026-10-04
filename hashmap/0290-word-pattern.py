@@ -3,13 +3,15 @@
 https://leetcode.com/problems/word-pattern/
 
 Pattern:    hashmap bijection (one-to-one mapping), clue: "full match" / "bijection"
-Key idea:   Same as Isomorphic Strings (205), but with words. One dict pattern -> word
-            keeps the mapping consistent; a set of used words makes sure no two
-            letters share a word. A set is enough for the reverse direction because
-            I only need membership.
+Key idea:
+  - same as Isomorphic Strings (205), but with words
+  - dict pattern -> word keeps each letter's mapping consistent
+  - set of used words: no two letters share a word (only need membership)
+  - check len(pattern) == number of words first
 Complexity: O(n) time, O(n) space (n = len(s); the word list is the O(n) part)
-Mistake I made: Forgot to compare len(pattern) with the number of WORDS (not len(s)).
-            Without it, zip() stops early: "abba" vs "dog cat cat dog fish" -> True.
+Mistake I made:
+  - forgot the length check (and it's the WORD count, not len(s))
+  - without it zip() stops early: "abba" vs "dog cat cat dog fish" -> True
 """
 
 class Solution:

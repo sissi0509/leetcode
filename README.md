@@ -11,7 +11,7 @@ Each solution comes with a short **"how I'd explain it"** note, because explaini
 ```
 e.g. `two-pointers/0015-3sum.py`, `sliding-window/0003-longest-substring-without-repeating-characters.py`
 
-Every file starts with the same header (see [`_template/solution.py`](_template/solution.py)):
+Every file starts with the same header (see [`_template/sample.py`](_template/sample.py)):
 - **Pattern**: which technique, and the clue in the problem that points to it
 - **Key idea**: the one insight that makes it work, in plain words
 - **Complexity**: time / space
@@ -22,7 +22,7 @@ Every file starts with the same header (see [`_template/solution.py`](_template/
 | Tier | Topics | Solved |
 |---|---|---|
 | A: Core patterns | Hashmap · Two Pointers · Array · Sliding Window · Binary Search · Stack · Heap · Intervals | 2 / 47 |
-| B: Linked structures & recursion | Linked List · Binary Tree · BFS · BST | 0 / 32 |
+| B: Linked structures & recursion | Linked List · Binary Tree · BFS · BST | 1 / 32 |
 | C: Graphs & search | Graph · Graph BFS · Trie · Backtracking | 0 / 19 |
 | D: Sorting, matrix, greedy | Divide & Conquer · Matrix · Greedy | 2 / 16 |
 | E: Dynamic programming | Kadane · 1D DP · Multi-D DP | 0 / 16 |

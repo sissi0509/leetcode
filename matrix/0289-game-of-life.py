@@ -3,13 +3,15 @@
 https://leetcode.com/problems/game-of-life/
 
 Pattern:    in-place state encoding, clue: "update simultaneously" + "in place"
-Key idea:   Each cell needs its neighbours' OLD values, so encode old + new state
-            together: 2 = live -> dead, 3 = dead -> live (0 and 1 unchanged).
-            A neighbour was originally live if it is 1 or 2; unvisited cells still
-            hold 0/1, so the same check works. A second pass decodes 2 -> 0, 3 -> 1.
+Key idea:
+  - each cell needs its neighbours' OLD values, so store old + new together
+  - 2 = live -> dead, 3 = dead -> live (0 and 1 unchanged)
+  - originally live = 1 or 2 (unvisited cells still hold 0/1, same check works)
+  - second pass decodes: 2 -> 0, 3 -> 1
 Complexity: O(m*n) time, O(1) extra space
-Follow-ups: bitmask version (bit 0 = old, bit 1 = new, decode with >>= 1);
-            infinite board -> store only a set of live (r, c) cells + Counter.
+Follow-ups:
+  - bitmask: bit 0 = old, bit 1 = new, decode with >>= 1
+  - infinite board: keep a set of live (r, c) cells + Counter of neighbours
 """
 
 class Solution:

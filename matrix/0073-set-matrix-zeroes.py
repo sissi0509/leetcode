@@ -3,16 +3,15 @@
 https://leetcode.com/problems/set-matrix-zeroes/
 
 Pattern:    in-place marker storage, clue: "do it in place" + follow-up "O(1) space"
-Key idea:   Use the first row and first column as flags: matrix[0][c] == 0 means
-            "zero column c", matrix[r][0] == 0 means "zero row r". Since they now
-            hold markers, record whether the first row/column had a zero of their
-            own in two booleans *before* marking, and apply those last.
-            Path there: copy the matrix O(mn) -> row/col sets O(m+n) -> reuse the
-            first row/col O(1).
+Key idea:
+  - first row/col are the flags: matrix[0][c] == 0 -> zero column c, matrix[r][0] == 0 -> zero row r
+  - save "did row 0 / col 0 have a zero?" in two booleans BEFORE marking
+  - decode the inner cells first, then apply the two booleans last
+  - path there: copy O(mn) -> row/col sets O(m+n) -> reuse first row/col O(1)
 Complexity: O(m*n) time, O(1) extra space
-Mistake I made: When encoding I remembered to skip the first row/column, but when
-            decoding I forgot. My decode loops started at 0, so they read markers
-            I had just written. Lesson: check the code against my own plan.
+Mistake I made:
+  - decode loops started at 0, so they read markers I had just written
+  - lesson: check the code against my own plan (the plan said skip row/col 0)
 """
 
 
