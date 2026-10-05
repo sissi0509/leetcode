@@ -9,8 +9,7 @@ Key idea:
   - children added during that loop wait for the next level
   - range(len(queue)) is evaluated once, so it's a safe snapshot
 Complexity: O(n) time, O(w) space (w = max width, at most about n/2)
-Mistake I made:
-  - forgot the final `return res`
+
 """
 
 from collections import deque
