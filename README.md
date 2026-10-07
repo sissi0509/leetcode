@@ -23,7 +23,7 @@ Every file starts with the same header (see [`_template/sample.py`](_template/sa
 |---|---|---|
 | A: Core patterns | Hashmap · Two Pointers · Array · Sliding Window · Binary Search · Stack · Heap · Intervals | 4 / 47 |
 | B: Linked structures & recursion | Linked List · Binary Tree · BFS · BST | 5 / 32 |
-| C: Graphs & search | Graph · Graph BFS · Trie · Backtracking | 0 / 19 |
+| C: Graphs & search | Graph · Graph BFS · Trie · Backtracking | 1 / 19 |
 | D: Sorting, matrix, greedy | Divide & Conquer · Matrix · Greedy | 2 / 16 |
 | E: Dynamic programming | Kadane · 1D DP · Multi-D DP | 0 / 16 |
 | F: Other | Strings · Bit Manipulation · Math | 0 / 20 |
