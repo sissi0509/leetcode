@@ -10,7 +10,7 @@ Key idea:
   - mark the cell used ('#') before recursing, restore it after: that undo is the backtracking
   - '#' never matches a letter, so the same check also blocks reuse
   - no memo: a False at (r, c, i) depends on which cells this path already used
-Speed-ups (same worst case, much faster in practice):
+Speed-ups (in the code; same worst case, much faster in practice):
   - if any letter appears more often in word than on the board -> False before searching
   - if the last letter is rarer on the board than the first, search the reversed word
 Complexity: O(m * n * 3^L) time (4 directions at the first step, then 3), O(L) recursion space
@@ -18,12 +18,25 @@ Mistake I made:
   - first try: forgot to mark the visited cell with '#', so the path reused cells
 """
 
+from collections import Counter
+
+
 class Solution:
     def exist(self, board: list[list[str]], word: str) -> bool:
         rows = len(board)
         cols = len(board[0])
         n = len(word)
         dirs = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+
+        board_cnt = Counter(ch for row in board for ch in row)
+        word_cnt = Counter(word)
+
+        for ch, cnt in word_cnt.items():
+            if cnt > board_cnt[ch]:
+                return False
+
+        if board_cnt[word[0]] > board_cnt[word[-1]]:
+            word = word[::-1]
 
         def dfs(r, c, i):
             if i == n:
