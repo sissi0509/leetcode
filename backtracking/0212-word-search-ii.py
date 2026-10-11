@@ -7,6 +7,8 @@ Key idea:
   - running Word Search I once per word repeats the same grid walks for shared prefixes
   - put all words in a trie; one DFS from every cell walks the board and the trie together
   - stop a path as soon as the next letter isn't a child of the current trie node
+  - ONE guard at the top of dfs (bounds + letter in parent.children); '#' is never a child,
+    so visited cells are skipped by the same check, and no call site needs its own check
   - the node at the end of a word stores the word itself (non-empty `word` = a word ends here)
   - found a word -> append it, then clear node.word, so no path can add it twice (no set needed)
   - mark the cell '#' before recursing, restore it after (a path can't reuse a cell)
@@ -25,14 +27,14 @@ Mistake I made:
       * `del node` only deletes the local name; the trie still holds the node
         -> `del parent.children[ch]` (that's why dfs gets the parent)
       * outer loop called dfs on every cell, but dfs starts with parent.children[ch]
-        -> KeyError; the guard has to be at every call site (or move it into dfs)
+        -> KeyError; final version moves the one guard to the top of dfs
 """
 
 
 class TrieNode:
-    def __init__(self, word=""):
+    def __init__(self):
         self.children = {}
-        self.word = word
+        self.word = ""
 
 
 class Trie:
@@ -60,6 +62,9 @@ class Solution:
         res = []
 
         def dfs(r, c, parent):
+            if not (0 <= r < rows and 0 <= c < cols) or board[r][c] not in parent.children:
+                return
+
             ch = board[r][c]
             node = parent.children[ch]
 
@@ -70,8 +75,7 @@ class Solution:
             board[r][c] = '#'
             for dr, dc in [(-1, 0), (1, 0), (0, 1), (0, -1)]:
                 nr, nc = dr + r, dc + c
-                if (0 <= nr < rows and 0 <= nc < cols and board[nr][nc] in node.children):
-                    dfs(nr, nc, node)
+                dfs(nr, nc, node)
             board[r][c] = ch
 
             if not node.children and not node.word:
@@ -79,7 +83,6 @@ class Solution:
 
         for r in range(rows):
             for c in range(cols):
-                if board[r][c] in trie.root.children:
-                    dfs(r, c, trie.root)
+                dfs(r, c, trie.root)
 
-        return res
+        return list(res)
