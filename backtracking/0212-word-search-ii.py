@@ -7,26 +7,31 @@ Key idea:
   - running Word Search I once per word repeats the same grid walks for shared prefixes
   - put all words in a trie; one DFS from every cell walks the board and the trie together
   - stop a path as soon as the next letter isn't a child of the current trie node
-  - the node at the end of a word stores the word itself, so no string is built during DFS
+  - the node at the end of a word stores the word itself (non-empty `word` = a word ends here)
+  - found a word -> append it, then clear node.word, so no path can add it twice (no set needed)
   - mark the cell '#' before recursing, restore it after (a path can't reuse a cell)
-  - the same word can be found by many paths -> collect into a set
-    (standard alternative: clear the node's word after the first hit)
-  - here `is_word` is checked BEFORE the bounds check, so a word ending at the board's edge
-    is still recorded when dfs steps off the board
-Complexity: O(m * n * 4 * 3^(L-1)) time worst case (L = longest word), O(total letters) trie space
-Speed-up worth mentioning: after a word is found, delete trie leaves that no longer lead to any
-word, so later searches skip dead branches (about 3x faster on an all-'a' board)
+  - prune: after the loop, if the node has no children and no word, delete it from its PARENT
+    (`del parent.children[ch]`). True exactly when every word under this node is found.
+    It runs on the way back up, so deletions cascade toward the root.
+Complexity: O(m * n * 4 * 3^(L-1)) time worst case (L = longest word), O(total letters) trie space;
+            pruning makes later searches skip finished branches (about 3x faster on an all-'a' board)
 Mistake I made:
   - 2026-09-15: `TrieNode` without (), undefined `col`, appended a stale `word` variable
-  - 2026-10-10: `TrieNode` without () again (3rd time overall), forgot to restore the cell,
-    each word appended 4 times (one per neighbor call) -> switched to a set
+  - 2026-10-10 v1: `TrieNode` without () again (3rd time), forgot to restore the cell,
+    each word appended 4 times (one per neighbor call) -> fixed with a set
+  - 2026-10-10 pruned rewrite:
+      * `res.append(word)`: `word` was the leftover loop variable from building the trie
+        (always the last word) -> must be `node.word`. Same bug as 09-15.
+      * `del node` only deletes the local name; the trie still holds the node
+        -> `del parent.children[ch]` (that's why dfs gets the parent)
+      * outer loop called dfs on every cell, but dfs starts with parent.children[ch]
+        -> KeyError; the guard has to be at every call site (or move it into dfs)
 """
 
 
 class TrieNode:
     def __init__(self, word=""):
         self.children = {}
-        self.is_word = False
         self.word = word
 
 
@@ -40,17 +45,7 @@ class Trie:
             if ch not in cur.children:
                 cur.children[ch] = TrieNode()
             cur = cur.children[ch]
-        cur.is_word = True
         cur.word = word
-
-    def find_word(self, word):
-        cur = self.root
-        for ch in word:
-            if ch not in cur.children:
-                return False
-            cur = cur.children[ch]
-
-        return cur.is_word
 
 
 class Solution:
@@ -62,26 +57,29 @@ class Solution:
 
         rows = len(board)
         cols = len(board[0])
-        res = set()
+        res = []
 
-        def dfs(r, c, node):
-            if node.is_word:
-                res.add(node.word)
+        def dfs(r, c, parent):
+            ch = board[r][c]
+            node = parent.children[ch]
 
-            if not (0 <= r < rows and 0 <= c < cols) or board[r][c] not in node.children:
-                return
+            if node.word:
+                res.append(node.word)
+                node.word = ""
 
-            temp = board[r][c]
             board[r][c] = '#'
-
             for dr, dc in [(-1, 0), (1, 0), (0, 1), (0, -1)]:
                 nr, nc = dr + r, dc + c
-                dfs(nr, nc, node.children[temp])
+                if (0 <= nr < rows and 0 <= nc < cols and board[nr][nc] in node.children):
+                    dfs(nr, nc, node)
+            board[r][c] = ch
 
-            board[r][c] = temp
+            if not node.children and not node.word:
+                del parent.children[ch]
 
         for r in range(rows):
             for c in range(cols):
-                dfs(r, c, trie.root)
+                if board[r][c] in trie.root.children:
+                    dfs(r, c, trie.root)
 
-        return list(res)
+        return res
