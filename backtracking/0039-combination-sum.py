@@ -27,16 +27,16 @@ class Solution(object):
         path = []
         n = len(candidates)
 
-        def dfs(start, pre_total):
-            if pre_total == target:
+        def dfs(start, total):
+            if total == target:
                 res.append(path[:])
                 return
 
             for i in range(start, n):
-                if pre_total + candidates[i] > target:
+                if total + candidates[i] > target:
                     break
                 path.append(candidates[i])
-                dfs(i, pre_total + candidates[i])
+                dfs(i, total + candidates[i])
                 path.pop()
 
         dfs(0, 0)
