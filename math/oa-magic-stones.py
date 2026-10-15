@@ -11,7 +11,7 @@ Key idea:
     count // 2 pairs become count // 2 stones one level up (the carry)
   - the order of merges doesn't matter: leftovers are fixed, like binary digits
   - carries can go above 9999, so the list needs extra room:
-    each carry halves the count, so about log2(n) extra levels are enough (n // 2 is plenty)
+    each carry halves the count, so n.bit_length() extra levels are enough (~log2 n)
   - changing levels[i + 1] while sweeping is safe: the loop reads it only when it gets there
 Complexity: O(n + L) time, L = number of levels (~10000 + log n); O(L) space
 Mistake I made:
@@ -21,7 +21,7 @@ Mistake I made:
 
 
 def magic(stones):
-    length = max(stones) + len(stones) // 2 + 1
+    length = max(stones) + len(stones).bit_length() + 1
     levels = [0] * (length + 1)
 
     for num in stones:
