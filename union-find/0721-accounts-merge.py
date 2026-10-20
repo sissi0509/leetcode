@@ -11,6 +11,8 @@ Key idea:
   - output: name of the root account + sorted emails
 Complexity: O(E log E) time for sorting (E = total emails); unions/finds are near O(1)
             amortized (α(n)); O(E + n) space
+Simpler: store only the FIRST owner of each email and union while reading (one loop, plain dict)
+        -> see SolutionSimple
 Mistake I made (v1):
   - looped over the whole account, so the NAME was a key -> both Johns merged
   - union(0, i) used positions in the list, not the account indices nodes[0], nodes[i]
@@ -68,3 +70,23 @@ class Solution:
             result.append([accounts[root][0]] + sorted(mails))
 
         return result
+
+
+class SolutionSimple:
+    def accountsMerge(self, accounts: list[list[str]]) -> list[list[str]]:
+        n = len(accounts)
+        dsu = DSU(n)
+
+        owner = {}                              # email -> first account index that had it
+        for i, account in enumerate(accounts):
+            for mail in account[1:]:
+                if mail in owner:
+                    dsu.union(i, owner[mail])
+                else:
+                    owner[mail] = i
+
+        groups = defaultdict(set)
+        for i in range(n):
+            groups[dsu.find(i)].update(accounts[i][1:])
+
+        return [[accounts[root][0]] + sorted(mails) for root, mails in groups.items()]
