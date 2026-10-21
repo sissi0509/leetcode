@@ -12,6 +12,9 @@ Key idea:
   - `*` (unit = p[r-2] + '*'), two choices:
       zero copies  -> skip the unit:             dp[r-2][c]
       one more copy -> p[r-2] matches s[c-1] and dp[r][c-1]  (unit stays available)
+Edge case: a leading '*' (p = "*") would make dp[r - 2] = dp[-1], which Python silently wraps
+  to the LAST row (no crash, just a wrong read). LeetCode guarantees every '*' has a valid char
+  before it, so r >= 2 always holds; say that constraint out loud, or guard with r >= 2.
 Complexity: O(m * n) time and space (m = len(s), n = len(p)); can roll to two rows
 Mistake I made:
   - first read `*` as the wildcard meaning (any sequence, LC44); in LC10 it repeats the
