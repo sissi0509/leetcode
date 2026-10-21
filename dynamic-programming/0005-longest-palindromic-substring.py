@@ -11,7 +11,13 @@ Key idea:
     (a palindrome centered on the last char has length 1)
 Complexity: O(n^2) time; O(1) extra space if expand returns indices and you slice once at the end
             (slicing inside expand builds an O(n) string per call)
-Alternative: 2-D DP, dp[i][j] = s[i] == s[j] and (j - i < 2 or dp[i + 1][j - 1]); O(n^2) time AND space
+Alternative: 2-D DP (SolutionDP), dp[i][j] = s[i] == s[j] and (j - i < 2 or dp[i + 1][j - 1])
+  - fill order: dp[i][j] needs dp[i + 1][j - 1] (the row below), so i goes from n - 1 DOWN to 0
+  - O(n^2) time AND space
+Mistake I made (DP):
+  - top-down memo with a dict of (l, r) tuples -> Memory Limit Exceeded at n = 1000
+    (~500k tuple keys); a 2-D list of bools is much lighter and needs no recursion
+  - called find_palindrome(l, n) instead of (l, r); updated max_string but never max_len
 """
 
 
@@ -41,3 +47,19 @@ class Solution:
                 max_string = s2
 
         return max_string
+
+
+class SolutionDP:
+    def longestPalindrome(self, s: str) -> str:
+        n = len(s)
+        dp = [[False] * n for _ in range(n)]
+        best_l, best_r = 0, 0
+
+        for i in range(n - 1, -1, -1):
+            for j in range(i, n):
+                if s[i] == s[j] and (j - i < 2 or dp[i + 1][j - 1]):
+                    dp[i][j] = True
+                    if j - i > best_r - best_l:
+                        best_l, best_r = i, j
+
+        return s[best_l:best_r + 1]
