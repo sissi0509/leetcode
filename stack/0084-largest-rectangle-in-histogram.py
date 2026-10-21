@@ -12,7 +12,9 @@ Key idea:
   - append a 0-height sentinel so every bar gets popped at the end; empty stack -> left = -1
 Complexity: O(n) time (each index pushed and popped once), O(n) space
 Mistake I made:
-  - didn't see why a stack fits; learned it via LC739 first (solution shown, retype owed)
+  - didn't see why a stack fits; learned it via LC739 first (solution shown, then retyped)
+  - flagged monotonic stack as a weak pattern: before coding, say what the stack holds,
+    increasing or decreasing, and what a pop means
 """
 
 
