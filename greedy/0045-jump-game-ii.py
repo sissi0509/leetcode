@@ -9,6 +9,9 @@ Key idea:
   - stop as soon as farthest >= n - 1
   - cleaner form (SolutionSimple): one pass over i < n - 1; when i reaches the end of the current
     window, take a jump and set end = farthest. n == 1 needs no special case (the loop never runs)
+  - LC45 guarantees the end is reachable. If it might NOT be (e.g. [1, 0, 1]), SolutionSimple
+    silently returns a wrong count (2); it needs `if far <= i: return -1` before jumping.
+    The level-window version (Solution) already returns -1 correctly: the next window is empty.
 Complexity: O(n) time (every index scanned once), O(1) space
 Mistake I made:
   - step started at 1, so a single-element array (already at the end) needed a special case
@@ -46,6 +49,8 @@ class SolutionSimple:
         for i in range(len(nums) - 1):
             far = max(far, i + nums[i])
             if i == end:             # used up the current window: must jump
+                if far <= i:         # can't get past i (only needed if the end may be unreachable)
+                    return -1
                 jumps += 1
                 end = far
         return jumps
