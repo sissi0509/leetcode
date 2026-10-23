@@ -51,3 +51,43 @@ class Solution:
                     heapq.heappush(heap, (price + p, to_city, stop + 1))
 
         return -1
+
+
+class SolutionBellmanFord:
+    # round r = cheapest cost to every city using at most r flights; k stops = k + 1 flights
+    def findCheapestPrice(self, n: int, flights: list[list[int]], src: int, dst: int, k: int) -> int:
+        INF = float('inf')
+        cost = [INF] * n
+        cost[src] = 0
+
+        for _ in range(k + 1):
+            new_cost = cost[:]                      # copy: one round = at most ONE more flight
+            for u, v, p in flights:
+                if cost[u] + p < new_cost[v]:
+                    new_cost[v] = cost[u] + p
+            cost = new_cost
+
+        return -1 if cost[dst] == INF else cost[dst]
+
+
+class SolutionBFS:
+    # level-by-level BFS; a city is re-queued only if this level reaches it more cheaply
+    def findCheapestPrice(self, n: int, flights: list[list[int]], src: int, dst: int, k: int) -> int:
+        graph = defaultdict(list)
+        for u, v, p in flights:
+            graph[u].append((v, p))
+
+        best = [float('inf')] * n
+        best[src] = 0
+        level = [(src, 0)]                          # (city, cost) reachable with this many flights
+
+        for _ in range(k + 1):
+            nxt = []
+            for city, c in level:
+                for to, p in graph[city]:
+                    if c + p < best[to]:
+                        best[to] = c + p
+                        nxt.append((to, c + p))
+            level = nxt
+
+        return -1 if best[dst] == float('inf') else best[dst]
