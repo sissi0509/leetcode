@@ -12,7 +12,7 @@ Key idea:
     ("null" -> None, not enqueued); values go back through int()
   - separator "," so negative / multi-digit values survive the round trip
 DFS version (CodecDFS): preorder (root, left, right) with "null" for missing children;
-  decode with one shared iterator: next value -> "null" means None, else build root, then left, then right
+  decode with one shared index (nonlocal i; or iter() + next()): next value -> "null" means None, else build root, then left, then right
   (the nulls tell the decoder where each subtree ends; preorder puts the root first, inorder can't)
 Complexity: O(n) time and O(n) space for both (DFS: O(h) recursion stack)
 Mistake I made (v1):
@@ -93,10 +93,13 @@ class CodecDFS:
         return ",".join(res)
 
     def deserialize(self, data):
-        vals = iter(data.split(","))
+        vals = data.split(",")
+        i = 0                                   # next unread value, shared by all calls
 
         def build():
-            val = next(vals)
+            nonlocal i
+            val = vals[i]
+            i += 1
             if val == "null":
                 return None
             node = TreeNode(int(val))
