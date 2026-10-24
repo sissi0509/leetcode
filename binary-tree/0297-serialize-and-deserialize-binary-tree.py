@@ -11,7 +11,10 @@ Key idea:
     popped from the queue, the next two values are its left and right child
     ("null" -> None, not enqueued); values go back through int()
   - separator "," so negative / multi-digit values survive the round trip
-Complexity: O(n) time and O(n) space for both
+DFS version (CodecDFS): preorder (root, left, right) with "null" for missing children;
+  decode with one shared iterator: next value -> "null" means None, else build root, then left, then right
+  (the nulls tell the decoder where each subtree ends; preorder puts the root first, inorder can't)
+Complexity: O(n) time and O(n) space for both (DFS: O(h) recursion stack)
 Mistake I made (v1):
   - serialize gave every None two None children (full-tree slots): mismatched with deserialize
     and exponential on a skewed tree
@@ -71,3 +74,34 @@ class Codec:
             i += 1
 
         return root
+
+
+class CodecDFS:
+
+    def serialize(self, root):
+        res = []
+
+        def dfs(node):
+            if not node:
+                res.append("null")
+                return
+            res.append(str(node.val))
+            dfs(node.left)
+            dfs(node.right)
+
+        dfs(root)
+        return ",".join(res)
+
+    def deserialize(self, data):
+        vals = iter(data.split(","))
+
+        def build():
+            val = next(vals)
+            if val == "null":
+                return None
+            node = TreeNode(int(val))
+            node.left = build()
+            node.right = build()
+            return node
+
+        return build()
