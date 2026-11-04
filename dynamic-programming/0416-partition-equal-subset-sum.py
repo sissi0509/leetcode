@@ -8,7 +8,7 @@ Key idea:
   - odd total -> False right away; else target = total // 2
   - dp[s] = some subset of the numbers seen so far sums to s; dp[0] = True
   - each num: skip it (dp[s]) or take it (dp[s - num])
-  - copy the row (prev) so each num is used once; no-copy version: loop s from target DOWN to num
+  - copy the row (prev) so each num is used once; SolutionInPlace: loop s from target DOWN to num (no copy)
   - early exit as soon as dp[target] is True
 Complexity: O(n * target) time, O(target) space
 Mistake I made (v1):
@@ -34,3 +34,26 @@ class Solution:
                 return True
 
         return dp[-1]
+
+
+class SolutionInPlace:
+    """No row copy: loop s from target DOWN to num.
+    Going down, dp[s - num] hasn't been updated for this num yet,
+    so it still means "reachable without num" -> each num used once.
+    (Going up, dp[s - num] may already include num -> num reused.)"""
+
+    def canPartition(self, nums: list[int]) -> bool:
+        total = sum(nums)
+        if total % 2 != 0:
+            return False
+        target = total // 2
+        dp = [False] * (target + 1)
+        dp[0] = True
+
+        for num in nums:
+            for s in range(target, num - 1, -1):
+                dp[s] = dp[s] or dp[s - num]
+            if dp[target]:
+                return True
+
+        return dp[target]
