@@ -27,4 +27,4 @@ Every file starts with the same header (see [`_template/sample.py`](_template/sa
 | D: Sorting, matrix, greedy | Divide & Conquer · Matrix · Greedy | 3 / 16 |
 | E: Dynamic programming | Kadane · 1D DP · Multi-D DP | 0 / 16 |
 | F: Other | Strings · Bit Manipulation · Math | 1 / 20 |
-| Extras (outside the 150) | Union-Find · Topological Sort · Dijkstra · 1-D DP · Heap | 10 |
+| Extras (outside the 150) | Union-Find · Topological Sort · Dijkstra · 1-D DP · Heap · Tree greedy | 11 |
