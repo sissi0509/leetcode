@@ -25,6 +25,6 @@ Every file starts with the same header (see [`_template/sample.py`](_template/sa
 | B: Linked structures & recursion | Linked List · Binary Tree · BFS · BST | 6 / 32 |
 | C: Graphs & search | Graph · Graph BFS · Trie · Backtracking | 5 / 19 |
 | D: Sorting, matrix, greedy | Divide & Conquer · Matrix · Greedy | 3 / 16 |
-| E: Dynamic programming | Kadane · 1D DP · Multi-D DP | 0 / 16 |
+| E: Dynamic programming | Kadane · 1D DP · Multi-D DP | 1 / 16 |
 | F: Other | Strings · Bit Manipulation · Math | 1 / 20 |
 | Extras (outside the 150) | Union-Find · Topological Sort · Dijkstra · 1-D DP · Heap · Tree greedy · Math · Sliding Window | 13 |
