@@ -9,7 +9,7 @@ Key idea:
   - dp[r] = True if some l has dp[l] True and s[l:r] in the word set
   - answer = dp[len(s)]
 Complexity: O(n^3) time (n^2 pairs, slicing costs n), O(n) space
-  - faster: only try l >= r - (longest word length)
+  - SolutionMaxLen: only try l >= r - max_len -> O(n * max_len^2)
 Mistake I made:
   - none; passed on the first run
   - `continue` at the end of the loop does nothing; `break` stops once dp[r] is True
@@ -28,4 +28,19 @@ class Solution:
                 if dp[l] and s[l:r] in word_set:
                     dp[r] = True
                     continue
+        return dp[-1]
+
+
+class SolutionMaxLen:
+    # only try words that fit: l from r - 1 down to r - max_len
+    def wordBreak(self, s: str, wordDict: list[str]) -> bool:
+        dp = [False] * (len(s) + 1)
+        dp[0] = True
+        word_set = set(wordDict)
+        max_len = max(len(word) for word in word_set)
+        for r in range(len(s) + 1):
+            for l in range(r - 1, max(-1, r - max_len - 1), -1):
+                if dp[l] and s[l:r] in word_set:
+                    dp[r] = True
+                    break
         return dp[-1]
